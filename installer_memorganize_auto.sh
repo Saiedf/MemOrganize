@@ -18,7 +18,9 @@
 # ==========================================================
 
 PACKAGE_NAME='enigma2-plugin-extensions-memorganize'
-LEGACY_PACKAGE_NAME='enigma2-plugin-extensions-memorganize'
+# Keep every previously used package name here, separated by spaces.
+# When PACKAGE_NAME changes in a future release, retain its old value here.
+LEGACY_PACKAGE_NAMES='enigma2-plugin-extensions-memorganizeiet5 enigma2-plugin-extensions-memorganize'
 PLUGIN_TITLE='MemOrganize'
 PLUGIN_FOLDER='MemOrganize'
 
@@ -430,9 +432,14 @@ detect_installed_package() {
     OLD_VERSION=''
     OLD_MANAGER=''
     OLD_PACKAGE_NAME=''
+    LEGACY_NAME=''
 
     check_installed_package_name "$PACKAGE_NAME" && return 0
-    check_installed_package_name "$LEGACY_PACKAGE_NAME" && return 0
+
+    for LEGACY_NAME in $LEGACY_PACKAGE_NAMES; do
+        [ "$LEGACY_NAME" = "$PACKAGE_NAME" ] && continue
+        check_installed_package_name "$LEGACY_NAME" && return 0
+    done
 
     return 1
 }
